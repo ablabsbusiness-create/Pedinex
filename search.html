@@ -2122,7 +2122,7 @@
     const requestedPatientId = String(urlParams.get('patientId') || '').trim().toUpperCase();
     const IS_PATIENT_DETAILS_PAGE = false;
     document.body.classList.toggle('patient-details-page', IS_PATIENT_DETAILS_PAGE);
-    let selectedPatientId = MOBILE_DETAIL_QUERY.matches ? '' : requestedPatientId;
+    let selectedPatientId = '';
 
     function getPatientDetailsUrl(patientId) {
       return `patient-details.html?patientId=${encodeURIComponent(patientId || '')}`;
@@ -3817,12 +3817,12 @@
         : worklistPatients;
       const shouldRenderSearchDetails = !MOBILE_DETAIL_QUERY.matches;
       const selectedPatientPool = shouldRenderSearchDetails ? (worklistPatients.length ? worklistPatients : patients) : patients;
-      if (shouldRenderSearchDetails && (!selectedPatientId || !patients.some((patient) => formatMissing(patient.patientId, 'ID not saved') === selectedPatientId)) && selectedPatientPool[0]) {
-        selectedPatientId = formatMissing(selectedPatientPool[0].patientId, 'ID not saved');
+      if (selectedPatientId && !patients.some((patient) => formatMissing(patient.patientId, 'ID not saved') === selectedPatientId)) {
+        selectedPatientId = '';
       }
 
       const selectedPatient = shouldRenderSearchDetails
-        ? selectedPatientPool.find((patient) => formatMissing(patient.patientId, 'ID not saved') === selectedPatientId) || selectedPatientPool[0] || null
+        ? selectedPatientPool.find((patient) => formatMissing(patient.patientId, 'ID not saved') === selectedPatientId) || null
         : null;
       const selectedPatientIdValue = selectedPatient ? formatMissing(selectedPatient.patientId, 'ID not saved') : '';
       const selectedHistoryDate = selectedPatientIdValue ? historyDateFilters[selectedPatientIdValue] || '' : '';
